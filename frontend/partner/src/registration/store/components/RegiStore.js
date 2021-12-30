@@ -5,7 +5,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
 import {AuthContext} from '../../../App';
 
-const baseURL = 'http://3.38.99.110:8080/api/partner';
 
 Date.prototype.format = function (f) {
   if (!this.valueOf()) return ' ';

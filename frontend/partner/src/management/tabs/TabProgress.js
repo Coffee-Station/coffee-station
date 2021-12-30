@@ -6,6 +6,7 @@ import OnGoingOrder from './progresstabs/OnGoingOrder';
 import styled from 'styled-components/native';
 import axios from 'axios';
 import {ScrollView} from 'react-native-gesture-handler';
+import {REACT_APP_BASE_URL} from "@env"
 
 // styled components
 const Container = styled.View`
@@ -83,7 +84,6 @@ const Col3 = styled(Col1)`
   background-color: white;
 `;
 
-const BASE_URL = 'http://3.38.99.110:8080/api/partner';
 
 //TP Context 생성
 const TabProgressContext = createContext();
@@ -126,7 +126,7 @@ const TabProgress = ({navigation}) => {
   const showPaidOrderList = async () => {
     try {
       const response = await axios.get(
-        BASE_URL + '/shop/orders/today/status/PAID',
+        process.env.REACT_APP_BASE_URL_PARTNER + '/shop/orders/today/status/PAID',
       );
       console.log(response.data);
       setPaidOrders(response.data);
@@ -139,7 +139,7 @@ const TabProgress = ({navigation}) => {
   const showPreparingOrderList = async () => {
     try {
       const response = await axios.get(
-        BASE_URL + '/shop/orders/today/status/PREPARING',
+        process.env.REACT_APP_BASE_URL_PARTNER + '/shop/orders/today/status/PREPARING',
       );
       // preparingOrders = response.data;
       setPreparingOrders(response.data);
@@ -173,7 +173,7 @@ const TabProgress = ({navigation}) => {
 
     try {
       await axios.patch(
-        BASE_URL + `/shop/orders/${selectedOrder.orderId}/status`,
+        process.env.REACT_APP_BASE_URL_PARTNER + `/shop/orders/${selectedOrder.orderId}/status`,
         data,
       );
       showPaidOrderList();
@@ -187,7 +187,7 @@ const TabProgress = ({navigation}) => {
     const data = {status: 'COMPLETED'};
     try {
       await axios.patch(
-        BASE_URL + `/shop/orders/${selectedOrder.orderId}/status`,
+        process.env.REACT_APP_BASE_URL_PARTNER + `/shop/orders/${selectedOrder.orderId}/status`,
         data,
       );
       showPaidOrderList();
@@ -201,7 +201,7 @@ const TabProgress = ({navigation}) => {
     const data = {status: 'REJECT'};
     try {
       await axios.patch(
-        BASE_URL + `/shop/orders/${selectedOrder.orderId}/status`,
+        process.env.REACT_APP_BASE_URL_PARTNER + `/shop/orders/${selectedOrder.orderId}/status`,
         data,
       );
       showPaidOrderList();

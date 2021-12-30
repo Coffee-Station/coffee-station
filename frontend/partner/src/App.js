@@ -117,7 +117,7 @@ export default function App({navigation}) {
     console.log('====usertoken========' + userToken);
     if (userToken !== null) {
       await axios
-        .patch(BASE_URL + '/firebase-token', data, {
+        .patch(process.env.REACT_APP_BASE_URL_PARTNER + '/firebase-token', data, {
           headers: {
             Authorization: 'Bearer ' + userToken,
           },
@@ -136,7 +136,7 @@ export default function App({navigation}) {
     console.log('====usertoken========' + userToken);
     await axios
       .patch(
-        BASE_URL + `/shop/orders/${orderId}/status`,
+        process.env.REACT_APP_BASE_URL_PARTNER + `/shop/orders/${orderId}/status`,
         {status: status},
         {
           headers: {
@@ -181,7 +181,7 @@ export default function App({navigation}) {
         let hasRegistered;
 
         await axios
-          .post(BASE_URL + '/login', data)
+          .post(process.env.REACT_APP_BASE_URL_PARTNER + '/login', data)
           .then(function (response) {
             userToken = response.data.token;
             // axios default header 설정
@@ -220,7 +220,7 @@ export default function App({navigation}) {
       },
       signUp: async data => {
         await axios
-          .post(BASE_URL + '/join', data)
+          .post(process.env.REACT_APP_BASE_URL_PARTNER + '/join', data)
           .then(function (response) {
             console.log('Sign Up!', response.data);
             alert('회원가입 성공');
@@ -232,7 +232,7 @@ export default function App({navigation}) {
       },
       registerShop: async data => {
         try {
-          const response = await axios.post(BASE_URL + '/shop', data);
+          const response = await axios.post(process.env.REACT_APP_BASE_URL_PARTNER + '/shop', data);
           console.log(response.data);
           dispatch({type: 'REGI_SHOP'});
         } catch (e) {

@@ -94,7 +94,7 @@ const AuthUser = ({navigation}) => {
     console.log('validation progressing...');
     console.log(data);
     try {
-      const response = await axios.post(baseURL + '/validation', data);
+      const response = await axios.post(process.env.REACT_APP_BASE_URL_PARTNER + '/validation', data);
       setIsValidated(true);
       alert('사업자 인증에 성공했습니다.');
       console.log(response.data);

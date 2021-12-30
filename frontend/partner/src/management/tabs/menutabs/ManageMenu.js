@@ -13,7 +13,6 @@ import {
 import axios from 'axios';
 import styled from 'styled-components/native';
 
-const BASE_URL = 'http://3.38.99.110:8080/api/partner';
 
 const Container = styled.View`
   flex-direction: row;
@@ -124,7 +123,7 @@ const ManageMenu = ({navigation}) => {
   // 메뉴 받아오기
   const getMenu = async () => {
     try {
-      const response = await axios.get(BASE_URL + '/menu');
+      const response = await axios.get(process.env.REACT_APP_BASE_URL_PARTNER + '/menu');
       setMenu(response.data.menuList);
       // console.log(response.data.menuList[0]);
       // 만약 데이터 메뉴 리스트가 빈 배열이라면
@@ -140,7 +139,7 @@ const ManageMenu = ({navigation}) => {
   const deleteMenu = async () => {
     try {
       const response = await axios.delete(
-        BASE_URL + `/menu/${selectedMenu.id}`,
+        process.env.REACT_APP_BASE_URL_PARTNER + `/menu/${selectedMenu.id}`,
       );
       console.log(response.data);
     } catch (e) {

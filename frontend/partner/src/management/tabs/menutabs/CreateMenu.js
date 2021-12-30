@@ -164,7 +164,7 @@ const CreateMenu = ({navigation}) => {
   const uploadImage = async () => {
     try {
       const response = await axios.post(
-        BASE_URL + `/menu/image`,
+        process.env.REACT_APP_BASE_URL_PARTNER + `/menu/image`,
         formData,
         {
           headers: {
@@ -188,7 +188,7 @@ const CreateMenu = ({navigation}) => {
       try {
         let userToken = await AsyncStorage.getItem('userToken');
         const response = await axios.post(
-          BASE_URL + `/menu`,
+          process.env.REACT_APP_BASE_URL_PARTNER + `/menu`,
           {categoryId, imgUrl, name, price, signiture},
           {
             headers: {
@@ -214,7 +214,7 @@ const CreateMenu = ({navigation}) => {
         console.log('메뉴 사이즈 삭제');
         try {
           const response = await axios.delete(
-            BASE_URL + `/menu/${menuId}/size/${sizeId}`,
+            process.env.REACT_APP_BASE_URL_PARTNER + `/menu/${menuId}/size/${sizeId}`,
             {menuId, sizeId},
             {
               headers: {
@@ -232,7 +232,7 @@ const CreateMenu = ({navigation}) => {
         console.log('메뉴 사이즈 등록');
         try {
           const response = await axios.post(
-            BASE_URL + `/menu/${menuId}/size`,
+            process.env.REACT_APP_BASE_URL_PARTNER + `/menu/${menuId}/size`,
             {price, sizeId},
             {
               headers: {
@@ -259,7 +259,7 @@ const CreateMenu = ({navigation}) => {
       let extratmp = extraList.slice();
       try {
         const response = await axios.post(
-          BASE_URL + `/menu/${menuId}/extra`,
+          process.env.REACT_APP_BASE_URL_PARTNER + `/menu/${menuId}/extra`,
           {name:extraName, price:extraPrice},
           {
             headers: {

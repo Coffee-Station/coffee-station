@@ -6,7 +6,6 @@ import axios from 'axios';
 import CompletedOrder from './completedtabs/CompletedOrders';
 import {ScrollView} from 'react-native-gesture-handler';
 
-const BASE_URL = 'http://3.38.99.110:8080/api/partner';
 
 // styled components
 const Container = styled.View`
@@ -107,7 +106,7 @@ const TabCompleted = ({navigation}) => {
 
   const showCompletedOrderList = async () => {
     try {
-      const response = await axios.get(BASE_URL + '/shop/orders');
+      const response = await axios.get(process.env.REACT_APP_BASE_URL_PARTNER + '/shop/orders');
       setCompletedOrders(response.data);
       // console.log(response.data)
       // console.log(response.data[0].menus[0].extras)

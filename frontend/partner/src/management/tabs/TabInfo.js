@@ -5,8 +5,8 @@ import styled from 'styled-components/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
+// import {REACT_APP_BASE_URL} from "@env"
 
-const BASE_URL = 'http://3.38.99.110:8080/api/partner';
 
 const Container = styled.View`
   flex-direction: row;
@@ -94,7 +94,7 @@ const TabInfo = ({navigation}) => {
   // shopinfo 받아오기
   const getShopInfo = async () => {
     try {
-      const response = await axios.get(BASE_URL + '/shop');
+      const response = await axios.get(process.env.REACT_APP_BASE_URL_PARTNER + '/shop');
       setShopInfo(response.data);
       setShopImageList(response.data.imgUrlList);
       console.log('==========샵인포==========', response.data);
@@ -114,6 +114,8 @@ const TabInfo = ({navigation}) => {
     } catch (e) {
       console.log(e);
     }
+    // console.log('.env : ', process.env.REACT_APP_BASE_URL_PARTNER)
+    // console.log('.env : ', REACT_APP_BASE_URL)
   };
   // 카메라로 찍어서 올리기
   // const addImage = () => {
@@ -146,7 +148,7 @@ const TabInfo = ({navigation}) => {
     try {
       console.log(shopInfo.id);
       const response = await axios.post(
-        BASE_URL + `/shop/${shopInfo.id}/images`,
+        process.env.REACT_APP_BASE_URL_PARTNER + `/shop/${shopInfo.id}/images`,
         formData,
         {
           headers: {
@@ -167,7 +169,7 @@ const TabInfo = ({navigation}) => {
     let userToken = await AsyncStorage.getItem('userToken');
     try {
       const response = await axios.patch(
-        BASE_URL + `/shop/status`,
+        process.env.REACT_APP_BASE_URL_PARTNER + `/shop/status`,
         {status},
         {
           headers: {
