@@ -20,6 +20,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: self-hosted
     steps:
+    - uses: actions/checkout@v2
     - name: Hello
     - run: echo helloworld!
     
