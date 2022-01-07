@@ -6,9 +6,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -20,13 +20,16 @@ jobs:
     # The type of runner that the job will run on
     runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: Hello
-      run: echo helloworld!
-    
-    - name: Run a multi-line script
-      run: | 
-        echo Add other actions to build,
-        echo test, and deploy your project.
-    
+      - uses: actions/checkout@v2
+
+      - name: Hello
+        run: echo helloworld!
+
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
+      - name: Docker Compose version
+        run: |
+          docker-compose --version
+          pwd
