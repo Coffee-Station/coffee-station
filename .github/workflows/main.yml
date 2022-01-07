@@ -19,11 +19,14 @@ jobs:
   test:
     # The type of runner that the job will run on
     runs-on: self-hosted
+    environment: production
     steps:
       - uses: actions/checkout@v2
+        env:
+          S3_REGION: ${{ secrets.S3_REGION }}
 
       - name: Hello
-        run: echo helloworld!
+        run: echo %S3_REGION%!
 
       - name: Run a multi-line script
         run: |
