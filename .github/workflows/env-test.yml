@@ -23,7 +23,12 @@ jobs:
           distribution: "temurin"
           java-version: "11"
           cache: "gradle"
-      - run: export SECRET_PASSPHRASE=${{ secrets.SECRET_PASSPHRASE }} && cd secret && sh decrypt_secret.sh && set -a && source .env && set +a && cd ../backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon && cd build/libs && ls
+      - run: export SECRET_PASSPHRASE=${{ secrets.SECRET_PASSPHRASE }} && cd secret && sh decrypt_secret.sh && set -a && source .env && set +a && cd ../backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: test-artifact
+          path: /backend/runner/build/libs/runner-0.0.1-SNAPSHOT.jar
 
   test:
     runs-on: self-hosted
