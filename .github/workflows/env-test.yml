@@ -20,10 +20,10 @@ jobs:
         distribution: 'adopt'
         java-version: '11'
         cache: 'gradle'
-    - run: |
-    echo "$GITHUB_WORKSPACE"
-    # cd $GITHUB_WORKSPACE/workspace/coffee-station/backend/runner
-    # ./gradlew build --no-daemon
+      run: |
+      echo "$GITHUB_WORKSPACE"
+      # cd $GITHUB_WORKSPACE/workspace/coffee-station/backend/runner
+      # ./gradlew build --no-daemon
 
   test:
     runs-on: self-hosted
