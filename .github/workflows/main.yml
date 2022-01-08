@@ -30,7 +30,7 @@ jobs:
           cat > test.txt <<EOF
           ${{ secrets.S3_REGION }}
           EOF
-          echo test.txt
+          cat test.txt
 
       - name: Run a multi-line script
         run: |
