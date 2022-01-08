@@ -23,11 +23,9 @@ jobs:
     environment: production
     steps:
       - uses: actions/checkout@v2
-        env:
-          S3_REGION: ${{ secrets.S3_REGION }}
 
       - name: Hello
-        run: echo "$S3_REGION"!
+        run: echo ${{ secrets.S3_REGION }}
 
       - name: Run a multi-line script
         run: |
