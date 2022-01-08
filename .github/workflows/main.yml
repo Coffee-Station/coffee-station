@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Hello
-        run: echo ${{ secrets.S3_REGION }}
+        # run: echo ${{ secrets.S3_REGION }}
         run: |
           cat > test.txt <<EOF
           ${{ secrets.S3_REGION }}
