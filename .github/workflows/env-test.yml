@@ -21,8 +21,9 @@ jobs:
         java-version: '11'
         cache: 'gradle'
     - run: |
-    cd $HOME/workspace/coffee-station/backend/runner
-    ./gradlew build --no-daemon
+    echo $GITHUB_WORKSPACE
+    # cd $GITHUB_WORKSPACE/workspace/coffee-station/backend/runner
+    # ./gradlew build --no-daemon
 
   test:
     runs-on: self-hosted
