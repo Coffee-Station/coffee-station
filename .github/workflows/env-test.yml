@@ -21,7 +21,7 @@ jobs:
       - name: Test Secrets
         run: |
           cat > test.txt <<EOF
-          ${{ secrets.S3_REGION }}
+          ${{ secrets.AWS_S3_REGION }}
           EOF
           cat test.txt
       - name: Docker Compose version
