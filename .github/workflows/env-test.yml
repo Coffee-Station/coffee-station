@@ -15,11 +15,11 @@ jobs:
   build:
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-java@v2
-      with:
-        distribution: 'adopt'
-        java-version: '11'
-        cache: 'gradle'
+    # - uses: actions/setup-java@v2
+    #   with:
+    #     distribution: 'adopt'
+    #     java-version: '11'
+    #     cache: 'gradle'
     # - run: ./gradlew build --no-daemo
   test:
     runs-on: self-hosted
