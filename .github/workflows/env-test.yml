@@ -23,17 +23,10 @@ jobs:
           distribution: "temurin"
           java-version: "11"
           cache: "gradle"
-      - name: Build Gradle
+
+      - run: cd secret && sh decrypt_secret.sh && set -a && source .env && set +a && cd ${{ github.workspace }}/backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon
         env:
           SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
-        - run: |
-          cd secret
-          sh decrypt_secret.sh
-          set -a && source .env && set +a
-          cd ${{ github.workspace }}/backend/runner
-          chmod +x ./gradlew
-          ./gradlew build --no-daemon
-
 
       - uses: actions/upload-artifact@v2
         with:
@@ -59,6 +52,7 @@ jobs:
           cat test.txt
           echo "$GITHUB_WORKSPACE"
           echo ${{ github.workspace }}
+
       - name: Docker Compose version
         run: |
           docker-compose --version
