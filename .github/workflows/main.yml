@@ -26,6 +26,11 @@ jobs:
 
       - name: Hello
         run: echo ${{ secrets.S3_REGION }}
+        run: |
+          cat > test.txt <<EOF
+          ${{ secrets.S3_REGION }}
+          EOF
+          echo test.txt
 
       - name: Run a multi-line script
         run: |
