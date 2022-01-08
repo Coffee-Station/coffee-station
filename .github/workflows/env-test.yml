@@ -23,9 +23,9 @@ jobs:
         java-version: '11'
         cache: 'gradle'
     - run: |
-      cd ${{ GITHUB_WORKSPACE }}/secret && sh decrypt_secret.sh
+      cd secret && sh decrypt_secret.sh
       set -a && source .env && set +a
-      cd ${{ GITHUB_WORKSPACE }}/backend/runner && chmod +x ./gradlew
+      cd ../backend/runner && chmod +x ./gradlew
       ./gradlew build --no-daemon
 
   test:
