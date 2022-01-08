@@ -23,8 +23,6 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
         cache: 'gradle'
-    - env:
-
     - run: echo "export ${{ secrets.SECRET_PASSPHRASE }}" && cd secret && sh decrypt_secret.sh && set -a && source .env && set +a && cd ../backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon
 
   test:
