@@ -35,6 +35,10 @@ jobs:
     environment: test
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: test-artifact
+          path: deploy/backend
 
       - name: Test Secrets
         run: |
@@ -47,3 +51,8 @@ jobs:
         run: |
           docker-compose --version
           pwd
+
+      - name: Check download
+        run: |
+        ls
+        working-directory: deploy/backend
