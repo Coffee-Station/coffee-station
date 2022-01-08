@@ -11,10 +11,14 @@ on:
   push:
     branches: [switch-to-env]
   workflow_dispatch:
+  
 jobs:
   build:
     steps:
       - uses: actions/checkout@v2
+      - name: Test build
+        run: |
+          eche "Hello"
   test:
     runs-on: self-hosted
     environment: test
