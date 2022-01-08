@@ -20,12 +20,10 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v2
         with:
-          distribution: "adopt"
+          distribution: "temurin"
           java-version: "11"
           cache: "gradle"
-      - name: Build with Gradle
-        run: |
-        export SECRET_PASSPHRASE=${{ secrets.SECRET_PASSPHRASE }} && cd secret && sh decrypt_secret.sh && set -a && source .env && set +a && cd ../backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon
+      - run: export SECRET_PASSPHRASE=${{ secrets.SECRET_PASSPHRASE }} && cd secret && sh decrypt_secret.sh && set -a && source .env && set +a && cd ../backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon
 
   test:
     runs-on: self-hosted
