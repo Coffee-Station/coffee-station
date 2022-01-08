@@ -48,6 +48,7 @@ jobs:
           EOF
           cat test.txt
           echo "$GITHUB_WORKSPACE"
+          echo ${{ GITHUB_WORKSPACE }}
       - name: Docker Compose version
         run: |
           docker-compose --version
