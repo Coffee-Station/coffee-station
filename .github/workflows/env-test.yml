@@ -20,7 +20,7 @@ jobs:
     #     distribution: 'adopt'
     #     java-version: '11'
     #     cache: 'gradle'
-      run: |
+    - run: |
         echo "$GITHUB_WORKSPACE"
         # cd $GITHUB_WORKSPACE/workspace/coffee-station/backend/runner
         # ./gradlew build --no-daemon
