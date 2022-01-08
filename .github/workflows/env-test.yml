@@ -31,6 +31,7 @@ jobs:
           path: backend/runner/build/libs/runner-0.0.1-SNAPSHOT.jar
 
   test:
+    needs: build
     runs-on: self-hosted
     environment: test
     steps:
@@ -54,5 +55,5 @@ jobs:
 
       - name: Check download
         run: |
-        ls
+          ls
         working-directory: deploy/backend
