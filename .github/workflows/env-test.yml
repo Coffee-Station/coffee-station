@@ -22,7 +22,7 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
         cache: 'gradle'
-    - run: cd backend/runner && ./gradlew build --no-daemon
+    - run: cd backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon
   test:
     runs-on: self-hosted
     environment: test
