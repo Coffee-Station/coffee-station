@@ -12,6 +12,18 @@ on:
     branches: [switch-to-env]
   workflow_dispatch:
 jobs:
+  build:
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+        cache: 'gradle'
+    - run: |
+    cd $HOME/workspace/coffee-station/backend/runner
+    ./gradlew build --no-daemon
+
   test:
     runs-on: self-hosted
     environment: test
