@@ -26,13 +26,13 @@ jobs:
       - name: Build Gradle
         env:
           SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
-        run: |
-        cd secret
-        sh decrypt_secret.sh
-        set -a && source .env && set +a
-        cd ${{ github.workspace }}/backend/runner
-        chmod +x ./gradlew
-        ./gradlew build --no-daemon
+        - run: |
+          cd secret
+          sh decrypt_secret.sh
+          set -a && source .env && set +a
+          cd ${{ github.workspace }}/backend/runner
+          chmod +x ./gradlew
+          ./gradlew build --no-daemon
 
 
       - uses: actions/upload-artifact@v2
