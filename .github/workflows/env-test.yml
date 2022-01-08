@@ -23,7 +23,7 @@ jobs:
           distribution: "temurin"
           java-version: "11"
           cache: "gradle"
-      - run: sh ${{ github.workspace }}/secret/decrypt_secret.sh && set -a && source .env && set +a && chmod +x ${{ github.workspace }}/backend/runner/gradlew && ${{ github.workspace }}/backend/runner/gradlew build --no-daemon
+      - run: sh ${{ github.workspace }}/secret/decrypt_secret.sh && set -a && source ${{ github.workspace }}/secret/.env && set +a && chmod +x ${{ github.workspace }}/backend/runner/gradlew && ${{ github.workspace }}/backend/runner/gradlew build --no-daemon
         env:
           SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
 
