@@ -23,7 +23,8 @@ jobs:
           distribution: "temurin"
           java-version: "11"
           cache: "gradle"
-      - run: export SECRET_PASSPHRASE=${{ secrets.SECRET_PASSPHRASE }} && cd secret && sh decrypt_secret.sh && set -a && source .env && set +a && cd ../backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon
+      - run: sh ${{ github.workspace }}/secret/decrypt_secret.sh && set -a && source .env && set +a && chmod +x ${{ github.workspace }}/backend/runner/gradlew && ${{ github.workspace }}/backend/runner/gradlew build --no-daemon
+        env: SECRET_PASSPHRASE=${{ secrets.SECRET_PASSPHRASE }}
 
       - uses: actions/upload-artifact@v2
         with:
