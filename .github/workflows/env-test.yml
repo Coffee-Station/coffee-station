@@ -15,6 +15,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: test
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-java@v2
@@ -22,7 +23,9 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
         cache: 'gradle'
-    - run: pwd && cd secret && sh decrypt_secret.sh && set -a && source .env && set +a && cd ../backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon
+    - env:
+
+    - run: echo "export ${{ secrets.SECRET_PASSPHRASE }}" && cd secret && sh decrypt_secret.sh && set -a && source .env && set +a && cd ../backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon
 
   test:
     runs-on: self-hosted
