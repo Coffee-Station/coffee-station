@@ -1,6 +1,18 @@
 FROM openjdk:11-jdk AS build
 WORKDIR /app
 
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle .
+COPY settings.gradle .
+COPY src/ src/
+RUN chmod +x gradlew
+RUN rm -rf build/generated
+RUN ["./gradlew", "clean", "build", "--stacktrace", "--exclude-task", "test"]
+
+FROM openjdk:11-jdk
+COPY --from=build /app/build/libs/runner-0.0.1-SNAPSHOT.jar app.jar
+
 ENV AWS_ACCESS_KEY ${AWS_ACCESS_KEY}
 ENV AWS_S3_BUCKET ${AWS_S3_BUCKET}
 ENV AWS_S3_REGION ${AWS_S3_REGION}
@@ -16,16 +28,5 @@ ENV FIREBASE_CLIENT_EMAIL ${FIREBASE_CLIENT_EMAIL}
 ENV FIREBASE_CLIENT_ID ${FIREBASE_CLIENT_ID}
 ENV FIREBASE_CLIENT_X509_CERT_URL ${FIREBASE_CLIENT_X509_CERT_URL}
 
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
-COPY src/ src/
-RUN chmod +x gradlew
-RUN rm -rf build/generated
-RUN ["./gradlew", "clean", "build", "--stacktrace", "--exclude-task", "test"]
-
-FROM openjdk:11-jdk
-COPY --from=build /app/build/libs/runner-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 ENTRYPOINT java -jar app.jar
