@@ -20,10 +20,10 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build the Docker image
         run: |
-        docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
-        cd ${{ github.workspace }}/backend/runner
-        docker build . --file Dockerfile --tag wns312/coffee-station-backend:latest
-        docker push wns312/coffee-station-backend:latest
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+          cd ${{ github.workspace }}/backend/runner
+          docker build . --file Dockerfile --tag wns312/coffee-station-backend:latest
+          docker push wns312/coffee-station-backend:latest
       # - uses: actions/setup-java@v2
       #   with:
       #     distribution: "temurin"
@@ -39,32 +39,32 @@ jobs:
       #     name: test-artifact
       #     path: backend/runner/build/libs/runner-0.0.1-SNAPSHOT.jar
 
-  test:
-    needs: build
-    runs-on: self-hosted
-    environment: test
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
-        with:
-          name: test-artifact
-          path: deploy/backend
+  # test:
+  #   needs: build
+  #   runs-on: self-hosted
+  #   environment: test
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: test-artifact
+  #         path: deploy/backend
 
-      - name: Test Secrets
-        run: |
-          cat > test.txt <<EOF
-          ${{ secrets.AWS_S3_REGION }}
-          EOF
-          cat test.txt
-          echo "$GITHUB_WORKSPACE"
-          echo ${{ github.workspace }}
+  #     - name: Test Secrets
+  #       run: |
+  #         cat > test.txt <<EOF
+  #         ${{ secrets.AWS_S3_REGION }}
+  #         EOF
+  #         cat test.txt
+  #         echo "$GITHUB_WORKSPACE"
+  #         echo ${{ github.workspace }}
 
-      - name: Docker Compose version
-        run: |
-          docker-compose --version
-          pwd
+  #     - name: Docker Compose version
+  #       run: |
+  #         docker-compose --version
+  #         pwd
 
-      - name: Check download
-        run: |
-          ls
-        working-directory: deploy/backend
+  #     - name: Check download
+  #       run: |
+  #         ls
+  #       working-directory: deploy/backend
