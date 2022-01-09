@@ -1,20 +1,29 @@
 FROM openjdk:11-jdk AS build
 WORKDIR /app
 
+ENV AWS_ACCESS_KEY ${AWS_ACCESS_KEY}
+ENV AWS_S3_BUCKET ${AWS_S3_BUCKET}
+ENV AWS_S3_REGION ${AWS_S3_REGION}
+ENV JWT_SECRET ${JWT_SECRET}
+ENV KAKAO_ADMIN ${KAKAO_ADMIN}
+ENV MYSQL_URL ${MYSQL_URL}
+ENV MYSQL_USERNAME ${MYSQL_USERNAME}
+ENV MYSQL_PASSWORD ${MYSQL_PASSWORD}
+ENV FIREBASE_PROJECT_ID ${FIREBASE_PROJECT_ID}
+ENV FIREBASE_PRIVATE_KEY_ID ${FIREBASE_PRIVATE_KEY_ID}
+ENV FIREBASE_PRIVATE_KEY ${FIREBASE_PRIVATE_KEY}
+ENV FIREBASE_CLIENT_EMAIL ${FIREBASE_CLIENT_EMAIL}
+ENV FIREBASE_CLIENT_ID ${FIREBASE_CLIENT_ID}
+ENV FIREBASE_CLIENT_X509_CERT_URL ${FIREBASE_CLIENT_X509_CERT_URL}
+
 COPY gradlew .
 COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
 COPY src src
-COPY src/main/resources/application.yml src/main/resources/application.yml
-COPY src/main/resources/application-API-KEY.properties src/main/resources/application-API-KEY.properties
-COPY src/main/resources/firebase/firebase-notification-key.json src/main/resources/firebase/firebase-notification-key.json
-RUN cat src/main/resources/firebase/firebase-notification-key.json
-RUN cat src/main/resources/application.yml
-RUN cat src/main/resources/application-API-KEY.properties
 RUN chmod +x gradlew
 RUN rm -rf build/generated
-RUN ["./gradlew", "clean", "build", "--stacktrace", "--exclude-task", "test"]
+RUN ["./gradlew", "clean", "build", "--stacktrace"]
 
 FROM openjdk:11-jdk
 COPY --from=build /app/build/libs/runner-0.0.1-SNAPSHOT.jar app.jar

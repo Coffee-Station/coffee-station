@@ -1,11 +1,10 @@
 version: "3.9"
 services:
   spring:
-    container_name: spring
-    build:
-      context: ./backend/runner
+    image: wns312/coffee-station-backend:latest
     ports:
       - 8080:8080
+      - 3306:3306
     networks:
       - runner
     restart: unless-stopped
