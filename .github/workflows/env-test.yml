@@ -19,9 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker image
+        env:
+          SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
         run: |
-          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+          cd secret
+          sh decrypt_secret.sh && set -a && source .env && set +a
           cd ${{ github.workspace }}/backend/runner
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
           docker build . --file Dockerfile --tag wns312/coffee-station-backend:latest
           docker push wns312/coffee-station-backend:latest
       # - uses: actions/setup-java@v2
