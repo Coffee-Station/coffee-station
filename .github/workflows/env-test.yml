@@ -18,20 +18,26 @@ jobs:
     environment: test
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-java@v2
-        with:
-          distribution: "temurin"
-          java-version: "11"
-          cache: "gradle"
+      - name: Build the Docker image
+        run: |
+        docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+        cd ${{ github.workspace }}/backend/runner
+        docker build . --file Dockerfile --tag wns312/coffee-station-backend:latest
+        docker push wns312/coffee-station-backend:latest
+      # - uses: actions/setup-java@v2
+      #   with:
+      #     distribution: "temurin"
+      #     java-version: "11"
+      #     cache: "gradle"
 
-      - run: cd secret && sh decrypt_secret.sh && set -a && source .env && set +a && cd ${{ github.workspace }}/backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon
-        env:
-          SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
+      # - run: cd secret && sh decrypt_secret.sh && set -a && source .env && set +a && cd ${{ github.workspace }}/backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon
+      #   env:
+      #     SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
 
-      - uses: actions/upload-artifact@v2
-        with:
-          name: test-artifact
-          path: backend/runner/build/libs/runner-0.0.1-SNAPSHOT.jar
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: test-artifact
+      #     path: backend/runner/build/libs/runner-0.0.1-SNAPSHOT.jar
 
   test:
     needs: build
