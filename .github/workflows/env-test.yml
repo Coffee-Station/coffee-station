@@ -19,6 +19,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build the Docker image
         env:
+          SECRET_PASSPHRASE_LOCAL: ${{ secrets.SECRET_PASSPHRASE_LOCAL }}
           SECRET_PASSPHRASE_PROD: ${{ secrets.SECRET_PASSPHRASE_PROD }}
         run: |
           cd secret
