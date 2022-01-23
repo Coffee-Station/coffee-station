@@ -70,7 +70,6 @@ jobs:
           cd ${{ github.workspace }}/secret
           sh decrypt_secret_prod.sh && set -a && source .env && set +a
 
-
       - name: Docker login
         run: |
           docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}

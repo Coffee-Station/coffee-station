@@ -9,7 +9,7 @@ services:
       - runner
     restart: unless-stopped
     env_file:
-      - secret/.env
+      - ../../secret/.env
   # redis:
   #   container_name: redis
   #   image: redis:latest
