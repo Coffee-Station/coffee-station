@@ -21,9 +21,9 @@ jobs:
         env:
           SECRET_PASSPHRASE_PROD: ${{ secrets.SECRET_PASSPHRASE_PROD }}
         run: |
-          echo "$(docker buildx ls)"
           cd secret
           sh decrypt_secret_prod.sh && set -a && source .env && set +a
+          env
           cd ${{ github.workspace }}/backend/runner
           docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
           docker build . --tag wns312/coffee-station-backend:latest
