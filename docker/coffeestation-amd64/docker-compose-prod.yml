@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  spring:
+    container_name: spring
+    image: wns312/coffee-station-backend:latest
+    ports:
+      - 8080:8080
+    networks:
+      - runner
+    restart: unless-stopped
+    env_file:
+      - secret/.env
+  # redis:
+  #   container_name: redis
+  #   image: redis:latest
+  #   networks:
+  #     - runner
+  #   ports:
+  #     - 6379:6379
+  #   volumes:
+  #     - ./data:/data
+  #   command: redis-server --appendonly yes
+  mysql:
+    container_name: mysql
+    image: wns312/mysql-utf8
+    networks:
+      - runner
+    ports:
+      - 3306:3306
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+networks:
+  runner:

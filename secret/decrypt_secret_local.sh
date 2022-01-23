@@ -1,9 +1,9 @@
 #!/bin/sh
 
-gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" --output \
+gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE_LOCAL" --output \
 ~/workspace/coffee-station/secret/.env \
-~/workspace/coffee-station/secret/.env.gpg
+~/workspace/coffee-station/secret/local.env.gpg
 
-gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" --output \
+gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE_LOCAL" --output \
 ~/workspace/coffee-station/backend/runner/src/main/resources/firebase/firebase-notification-key.json \
 ~/workspace/coffee-station/backend/runner/src/main/resources/firebase/firebase-notification-key.json.gpg

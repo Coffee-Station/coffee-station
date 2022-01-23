@@ -1,14 +1,16 @@
 version: "3.9"
 services:
   spring:
-    image: wns312/coffee-station-backend:latest
+    container_name: spring
+    platform: linux/arm64/v8
+    build: ../../backend/runner
     ports:
       - 8080:8080
     networks:
       - runner
     restart: unless-stopped
     env_file:
-      - secret/.env
+      - ../../secret/.env
   # redis:
   #   container_name: redis
   #   image: redis:latest
@@ -28,9 +30,6 @@ services:
       - 3306:3306
     volumes:
       - /var/lib/mysql:/var/lib/mysql
-    environment:
-      - MYSQL_DATABASE=ssafydb
-      - MYSQL_ROOT_PASSWORD=ssafy
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 networks:
   runner:
