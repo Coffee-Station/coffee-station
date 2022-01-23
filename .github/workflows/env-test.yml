@@ -53,15 +53,19 @@ jobs:
     environment: test
     steps:
       - uses: actions/checkout@v2
-      # - uses: actions/download-artifact@v2
-      #   with:
-      #     name: test-artifact
-      #     path: deploy/backend
+
+      - name: Decrypt env file & apply env
+        env:
+          SECRET_PASSPHRASE_LOCAL: ${{ secrets.SECRET_PASSPHRASE_LOCAL }}
+          SECRET_PASSPHRASE_PROD: ${{ secrets.SECRET_PASSPHRASE_PROD }}
+        run: |
+          cd ${{ github.workspace }}/secret
+          sh decrypt_secret_prod.sh && set -a && source .env && set +a
+
 
       - name: Docker login
         run: |
           docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
-
 
       - name: Pull docker images
         run: |
@@ -72,6 +76,10 @@ jobs:
           cd docker/coffeestation-amd64
           docker-compose -f docker-compose-prod.yml up -d
 
+      # - uses: actions/download-artifact@v2
+      #   with:
+      #     name: test-artifact
+      #     path: deploy/backend
       # - name: Test Secrets
       #   run: |
       #     echo "$GITHUB_WORKSPACE"
