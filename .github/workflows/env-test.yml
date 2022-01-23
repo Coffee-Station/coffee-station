@@ -73,7 +73,7 @@ jobs:
 
       - name: Docker compose up with prod yml files
         run: |
-          cd docker/coffeestation-amd64
+          cd ${{ github.workspace }}/docker/coffeestation-amd64
           docker-compose -f docker-compose-prod.yml up -d
 
       # - uses: actions/download-artifact@v2
