@@ -24,7 +24,6 @@ jobs:
         run: |
           cd secret
           sh decrypt_secret_prod.sh && set -a && source .env && set +a
-          env
           cd ${{ github.workspace }}/backend/runner
           docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
           docker build . --tag wns312/coffee-station-backend:latest
@@ -38,37 +37,52 @@ jobs:
       #     java-version: "11"
       #     cache: "gradle"
 
-      # - run: cd secret && sh decrypt_secret.sh && set -a && source .env && set +a && cd ${{ github.workspace }}/backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon
+      # - run: cd secret && sh decrypt_secret_prod.sh && set -a && source .env && set +a && cd ${{ github.workspace }}/backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon
       #   env:
-      #     SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
+      #     SECRET_PASSPHRASE_LOCAL: ${{ secrets.SECRET_PASSPHRASE_LOCAL }}
+      #     SECRET_PASSPHRASE_PROD: ${{ secrets.SECRET_PASSPHRASE_PROD }}
 
       # - uses: actions/upload-artifact@v2
       #   with:
       #     name: test-artifact
       #     path: backend/runner/build/libs/runner-0.0.1-SNAPSHOT.jar
 
-  # test:
-  #   needs: build
-  #   runs-on: self-hosted
-  #   environment: test
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: actions/download-artifact@v2
-  #       with:
-  #         name: test-artifact
-  #         path: deploy/backend
+  test:
+    needs: build
+    runs-on: self-hosted
+    environment: test
+    steps:
+      - uses: actions/checkout@v2
+      # - uses: actions/download-artifact@v2
+      #   with:
+      #     name: test-artifact
+      #     path: deploy/backend
 
-  #     - name: Test Secrets
-  #       run: |
-  #         echo "$GITHUB_WORKSPACE"
-  #         echo ${{ github.workspace }}
+      - name: Docker login
+        run: |
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
 
-  #     - name: Docker Compose version
-  #       run: |
-  #         docker-compose --version
-  #         pwd
 
-  #     - name: Check download
-  #       run: |
-  #         ls
-  #       working-directory: deploy/backend
+      - name: Pull docker images
+        run: |
+          docker pull wns312/coffee-station-backend:latest
+
+      - name: Docker compose up with prod yml files
+        run: |
+          cd docker/coffeestation-amd64
+          docker-compose -f docker-compose-prod.yml up -d
+
+      # - name: Test Secrets
+      #   run: |
+      #     echo "$GITHUB_WORKSPACE"
+      #     echo ${{ github.workspace }}
+
+      # - name: Docker Compose version
+      #   run: |
+      #     docker-compose --version
+      #     pwd
+
+      # - name: Check download
+      #   run: |
+      #     ls
+      #   working-directory: deploy/backend
