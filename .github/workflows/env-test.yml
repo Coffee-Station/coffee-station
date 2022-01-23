@@ -19,17 +19,17 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build the Docker image
         env:
-          SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE_PROD }}
+          SECRET_PASSPHRASE_PROD: ${{ secrets.SECRET_PASSPHRASE_PROD }}
         run: |
-          docker buildx ls
+          echo "$(docker buildx ls)"
           cd secret
           sh decrypt_secret_prod.sh && set -a && source .env && set +a
           cd ${{ github.workspace }}/backend/runner
           docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
-      # docker build . --tag wns312/coffee-station-backend:latest
-      # docker push wns312/coffee-station-backend:latest
-      # docker build . --tag wns312/coffee-station-backend:latest-m1
-      # docker push wns312/coffee-station-backend:latest-m1
+          docker build . --tag wns312/coffee-station-backend:latest
+          docker push wns312/coffee-station-backend:latest
+          docker build . --tag wns312/coffee-station-backend:latest-m1
+          docker push wns312/coffee-station-backend:latest-m1
 
       # - uses: actions/setup-java@v2
       #   with:
