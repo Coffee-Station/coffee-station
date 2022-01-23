@@ -4,7 +4,6 @@
 # documentation.
 # This workflow will build a package using Gradle and then publish it to GitHub packages when a release is created
 # For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-gradle
-
 name: Gradle Package
 
 on:
@@ -20,14 +19,18 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build the Docker image
         env:
-          SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
+          SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE_PROD }}
         run: |
+          docker buildx ls
           cd secret
-          sh decrypt_secret.sh && set -a && source .env && set +a
+          sh decrypt_secret_prod.sh && set -a && source .env && set +a
           cd ${{ github.workspace }}/backend/runner
           docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
-          docker build . --file Dockerfile --tag wns312/coffee-station-backend:latest
-          docker push wns312/coffee-station-backend:latest
+      # docker build . --tag wns312/coffee-station-backend:latest
+      # docker push wns312/coffee-station-backend:latest
+      # docker build . --tag wns312/coffee-station-backend:latest-m1
+      # docker push wns312/coffee-station-backend:latest-m1
+
       # - uses: actions/setup-java@v2
       #   with:
       #     distribution: "temurin"
@@ -56,10 +59,6 @@ jobs:
 
   #     - name: Test Secrets
   #       run: |
-  #         cat > test.txt <<EOF
-  #         ${{ secrets.AWS_S3_REGION }}
-  #         EOF
-  #         cat test.txt
   #         echo "$GITHUB_WORKSPACE"
   #         echo ${{ github.workspace }}
 
