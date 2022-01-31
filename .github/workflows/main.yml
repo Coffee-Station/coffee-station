@@ -1,42 +1,64 @@
-# This is a basic workflow to help you get started with Actions
+name: Stage Deploy
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [master]
-  pull_request:
-    branches: [master]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  test:
-    # The type of runner that the job will run on
-    # self-hosted
+  build:
     runs-on: ubuntu-latest
-    environment: production
+    environment: master
     steps:
       - uses: actions/checkout@v2
 
-      - name: Hello
-        # run: echo ${{ secrets.S3_REGION }}
+      - name: Apply env
+        env:
+          SECRET_PASSPHRASE_LOCAL: ${{ secrets.SECRET_PASSPHRASE_LOCAL }}
+          SECRET_PASSPHRASE_PROD: ${{ secrets.SECRET_PASSPHRASE_PROD }}
         run: |
-          cat > test.txt <<EOF
-          ${{ secrets.S3_REGION }}
-          EOF
-          cat test.txt
+          cd secret
+          sh decrypt_secret_prod.sh && set -a && source .env && set +a
 
-      - name: Run a multi-line script
+      - name: Docker login
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-      - name: Docker Compose version
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Build the Docker image
         run: |
-          docker-compose --version
-          pwd
+          cd ${{ github.workspace }}/backend/runner
+          docker build . --tag wns312/coffee-station-backend:latest
+
+      - name: Push the Docker image
+        run: |
+          docker push wns312/coffee-station-backend:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    environment: master
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Apply env
+        env:
+          SECRET_PASSPHRASE_LOCAL: ${{ secrets.SECRET_PASSPHRASE_LOCAL }}
+          SECRET_PASSPHRASE_PROD: ${{ secrets.SECRET_PASSPHRASE_PROD }}
+        run: |
+          cd ${{ github.workspace }}/secret
+          sh decrypt_secret_prod.sh && set -a && source .env && set +a
+
+      - name: Docker login
+        run: |
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Pull docker images
+        run: |
+          docker pull wns312/coffee-station-backend:latest
+
+      - name: Docker compose up with prod yml files
+        run: |
+          cd ${{ github.workspace }}/docker/coffeestation-amd64
+          docker-compose -f docker-compose-prod.yml up -d
+
+
