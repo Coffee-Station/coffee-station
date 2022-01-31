@@ -1,4 +1,7 @@
+
+*.json
 *.env
+*.txt
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,linux,gradle,visualstudio,intellij,reactnative,java
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,linux,gradle,visualstudio,intellij,reactnative,java
 

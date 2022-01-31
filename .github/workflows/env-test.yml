@@ -1,31 +1,99 @@
 # This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a package using Gradle and then publish it to GitHub packages when a release is created
 # For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-gradle
-
 name: Gradle Package
 
 on:
   push:
     branches: [switch-to-env]
   workflow_dispatch:
+
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Apply env
+        env:
+          SECRET_PASSPHRASE_LOCAL: ${{ secrets.SECRET_PASSPHRASE_LOCAL }}
+          SECRET_PASSPHRASE_PROD: ${{ secrets.SECRET_PASSPHRASE_PROD }}
+        run: |
+          cd secret
+          sh decrypt_secret_prod.sh && set -a && source .env && set +a
+
+      - name: Docker login
+        run: |
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Build the Docker image
+        run: |
+          cd ${{ github.workspace }}/backend/runner
+          docker build . --tag wns312/coffee-station-backend:latest
+
+      - name: Push the Docker image
+        run: |
+          docker push wns312/coffee-station-backend:latest
+
+      # - uses: actions/setup-java@v2
+      #   with:
+      #     distribution: "temurin"
+      #     java-version: "11"
+      #     cache: "gradle"
+
+      # - run: cd secret && sh decrypt_secret_prod.sh && set -a && source .env && set +a && cd ${{ github.workspace }}/backend/runner && chmod +x ./gradlew && ./gradlew build --no-daemon
+      #   env:
+      #     SECRET_PASSPHRASE_LOCAL: ${{ secrets.SECRET_PASSPHRASE_LOCAL }}
+      #     SECRET_PASSPHRASE_PROD: ${{ secrets.SECRET_PASSPHRASE_PROD }}
+
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: test-artifact
+      #     path: backend/runner/build/libs/runner-0.0.1-SNAPSHOT.jar
+
   test:
+    needs: build
     runs-on: self-hosted
     environment: test
     steps:
       - uses: actions/checkout@v2
 
-      - name: Test Secrets
-        # run: echo ${{ secrets.S3_REGION }}
+      - name: Apply env
+        env:
+          SECRET_PASSPHRASE_LOCAL: ${{ secrets.SECRET_PASSPHRASE_LOCAL }}
+          SECRET_PASSPHRASE_PROD: ${{ secrets.SECRET_PASSPHRASE_PROD }}
         run: |
-          cat > test.txt <<EOF
-          ${{ secrets }}
-          EOF
-          cat test.txt
-      - name: Docker Compose version
+          cd ${{ github.workspace }}/secret
+          sh decrypt_secret_prod.sh && set -a && source .env && set +a
+
+      - name: Docker login
         run: |
-          docker-compose --version
-          pwd
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Pull docker images
+        run: |
+          docker pull wns312/coffee-station-backend:latest
+
+      - name: Docker compose up with prod yml files
+        run: |
+          cd ${{ github.workspace }}/docker/coffeestation-amd64
+          docker-compose -f docker-compose-prod.yml up -d
+
+      # - uses: actions/download-artifact@v2
+      #   with:
+      #     name: test-artifact
+      #     path: deploy/backend
+      # - name: Test Secrets
+      #   run: |
+      #     echo "$GITHUB_WORKSPACE"
+      #     echo ${{ github.workspace }}
+
+      # - name: Docker Compose version
+      #   run: |
+      #     docker-compose --version
+      #     pwd
+
+      # - name: Check download
+      #   run: |
+      #     ls
+      #   working-directory: deploy/backend

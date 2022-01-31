@@ -33,9 +33,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 //
 //	// H2 Database
-//	runtimeOnly 'com.h2database:h2'
+	implementation 'com.h2database:h2'
 	// MySQL Database
-	runtimeOnly 'mysql:mysql-connector-java'
+	// runtimeOnly 'mysql:mysql-connector-java'
 	//spatial query
 	implementation 'org.hibernate:hibernate-spatial'
 //	compile group: 'org.hibernate', name: 'hibernate-spatial', version: '5.4.4.Final'

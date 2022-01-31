@@ -36,20 +36,8 @@ out/
 ### VS Code ###
 .vscode/
 
-### firebase key
-**/firebase-notification-key.json
-
 # Oauth properties
 **/application-oauth.yml
 
-### API-KEY
-**/application-API-KEY.properties
-
-## AWS-KEY
-**/resources/aws.yml
-
 ## querydsl로 생성되는 파일
 generated
-
-## Application.yml
-**/application.yml
