@@ -21,15 +21,15 @@ services:
   #   volumes:
   #     - ./data:/data
   #   command: redis-server --appendonly yes
-  mysql:
-    container_name: mysql
-    image: wns312/mysql-utf8
-    networks:
-      - runner
-    ports:
-      - 3306:3306
-    volumes:
-      - /var/lib/mysql:/var/lib/mysql
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  # mysql:
+  #   container_name: mysql
+  #   image: wns312/mysql-utf8
+  #   networks:
+  #     - runner
+  #   ports:
+  #     - 3306:3306
+  #   volumes:
+  #     - /var/lib/mysql:/var/lib/mysql
+  #   command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 networks:
   runner:
